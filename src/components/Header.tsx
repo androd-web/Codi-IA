@@ -21,16 +21,16 @@ export const Header = ({ theme, toggleTheme }: HeaderProps) => {
       </div>
 
       <div className="mb-5">
-        <div className="inline-block font-mono text-[11px] tracking-[2px] border border-vert px-3 py-1 uppercase text-vert">
-          Codi IA | By Codify
+        <div className="inline-block text-[11px] tracking-[2px] border border-vert px-3 py-1 uppercase text-vert ">
+          Codi IA | By Apex
         </div>
       </div>
 
       <h1 className="text-[clamp(28px,5vw,48px)] font-extrabold text-foreground leading-[1.1] mb-4">
         Diagnostic <span className="text-vert">Compétences</span><br />Numériques
-      </h1>
+      </h1> 
       <p className="text-muted text-sm md:text-base max-w-[520px] mx-auto leading-relaxed">
-        Réponds à 8 questions. L'IA génère ta feuille de route personnalisée vers les transformations numériques au Cameroun.
+        Réponds à 8 questions. Codi IA génère ta feuille de route personnalisée vers les transformations numériques au Cameroun.
       </p>
     </header>
   );

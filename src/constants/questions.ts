@@ -29,17 +29,17 @@ RÈGLES D'OR DE CODI IA:
 4. ACTIONNABLE: Chaque conseil doit pouvoir être appliqué dès demain, même avec peu de moyens.
 
 Les 6 parties obligatoires de ton rapport :
-## 🎯 Audit de compétences (Codi IA)
-## 🔗 Alignement stratégique
-## 📅 Hiérarchie d'apprentissage
-## 📚 Ressources locales (Cameroun)
-## 🗓️ Calendrier 6 mois
-## ⚡ Solutions aux défis contextuels`;
+##  Audit de compétences (Codi IA)
+##  Alignement stratégique
+##  Hiérarchie d'apprentissage
+##  Ressources locales (Cameroun)
+##  Calendrier 6 mois
+##  Solutions aux défis contextuels`;
 
 export const QUESTIONS: Question[] = [
   {
     id: 'background',
-    label: '01 / Profil actuel',
+    label: '01 : Profil actuel',
     question: 'Quelle est ta situation actuelle ?',
     hint: 'Sélectionne ce qui te correspond le mieux.',
     type: 'single',
@@ -53,7 +53,7 @@ export const QUESTIONS: Question[] = [
   },
   {
     id: 'programming_level',
-    label: '02 / Programmation',
+    label: '02 : Programmation',
     question: 'Quel est ton niveau en programmation ?',
     hint: 'Sois honnête — cette évaluation oriente toute la feuille de route.',
     type: 'single',
@@ -67,7 +67,7 @@ export const QUESTIONS: Question[] = [
   },
   {
     id: 'languages',
-    label: '03 / Technologies',
+    label: '03 : Technologies',
     question: 'Quelles technologies connais-tu déjà ? (multi-sélection)',
     hint: 'Coche tout ce que tu utilises ou as déjà utilisé.',
     type: 'multi',
@@ -75,7 +75,7 @@ export const QUESTIONS: Question[] = [
   },
   {
     id: 'domain_interest',
-    label: '04 / Domaine cible',
+    label: '04 : Domaine cible',
     question: 'Vers quel(s) secteur(s) transformateur(s) veux-tu te diriger ?',
     hint: 'Choisis 1 à 3 priorités maximum pour une feuille de route focalisée.',
     type: 'multi',
@@ -83,7 +83,7 @@ export const QUESTIONS: Question[] = [
   },
   {
     id: 'objective',
-    label: '05 / Objectif',
+    label: '05 : Objectif',
     question: 'Quel est ton objectif principal dans les 12 prochains mois ?',
     hint: 'Choisis l\'objectif qui correspond le mieux à ta vision.',
     type: 'single',
@@ -97,7 +97,7 @@ export const QUESTIONS: Question[] = [
   },
   {
     id: 'time_available',
-    label: '06 / Temps disponible',
+    label: '06 : Temps disponible',
     question: 'Combien d\'heures par semaine peux-tu consacrer à l\'apprentissage ?',
     hint: 'Sois réaliste — mieux vaut 5h constantes que 20h une semaine et rien ensuite.',
     type: 'slider',
@@ -106,7 +106,7 @@ export const QUESTIONS: Question[] = [
   },
   {
     id: 'constraints',
-    label: '07 / Contraintes',
+    label: '07 : Contraintes',
     question: 'Quels sont tes principaux obstacles ? (multi-sélection)',
     hint: 'Sélectionne tout ce qui s\'applique à ta situation réelle.',
     type: 'multi',
@@ -123,7 +123,7 @@ export const QUESTIONS: Question[] = [
   },
   {
     id: 'context',
-    label: '08 / Contexte',
+    label: '08 : Contexte',
     question: 'Décris brièvement ton projet ou ambition en quelques mots',
     hint: 'Optionnel mais très utile pour personnaliser les recommandations. Ex: "Je veux créer une app de gestion d\'inventaire pour les marchés de Douala"',
     type: 'textarea',

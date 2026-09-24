@@ -2,7 +2,7 @@ import * as LucideIcons from 'lucide-react';
 import { QUESTIONS } from '../constants/questions';
 import type { Option } from '../constants/questions';
 import { Icon } from './ui/Icon';
-import { cn } from '../lib/utils';
+import { cn } from '../lib/utils'; 
 
 type Answers = Record<string, string | string[] | number>;
 
@@ -122,7 +122,7 @@ export const Questionnaire = ({ step, answers, updateAnswer, onNext, onBack }: Q
           {q.type === 'textarea' && (
             <textarea 
               className="text-input"
-              placeholder={q.placeholder}
+              placeholder={q.placeholder} 
               value={(currentAnswer as string) || ''}
               onChange={(e) => updateAnswer(q.id, e.target.value)}
             />
