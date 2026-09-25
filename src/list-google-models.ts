@@ -1,14 +1,15 @@
 import "dotenv/config";
 
 async function listModels() {
-  const apiKey = process.env.VITE_GOOGLE_API_KEY;
+  const apiKey = process.env.VITE_GEMINI_API_KEY;
   if (!apiKey) {
-    console.error("VITE_GOOGLE_API_KEY missing");
+    console.error("VITE_GEMINI_API_KEY missing");
     return;
   }
 
   try {
-    const response = await fetch(`  https://api.groq.com/openai/v1${apiKey}`);
+    // Utilisation de l'endpoint officiel Google Generative AI
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
     const data = await response.json() as any;
     
     if (data.error) {
@@ -16,7 +17,7 @@ async function listModels() {
     } else {
       console.log("Available Models:");
       data.models.forEach((m: any) => {
-        if (m.supportedGenerationMethods.includes("generateContent")) {
+        if (m.supportedGenerationMethods?.includes("generateContent")) {
           console.log(`- ${m.name}`);
         }
       });

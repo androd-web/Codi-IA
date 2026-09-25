@@ -62,37 +62,36 @@ export default function App() {
       const prompt = buildPrompt(answers);
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-      if (!apiKey || apiKey.includes("votre_cle")) {
-        throw new Error("Clé  GEMINI non configurée. Veuillez ajouter VITE_GEMINI_API_KEY dans votre fichier .env");
+      if (!apiKey) {
+        throw new Error("Clé GEMINI non configurée. Veuillez ajouter VITE_GEMINI_API_KEY dans votre fichier .env");
       }
 
-      console.log("Appel à GEMINI (Modèle Gratuit)...");
+      console.log("Appel à GEMINI (Modèle 1.5 Flash)...");
       
-      const response = await fetch( `https://generativelanguage.googleapis.com/v1beta/models`, {
+      // Utilisation de l'API Google Generative Language
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${apiKey}`,
           "Content-Type": "application/json",
-          "HTTP-Referer": "http://localhost:5173",
-          "X-Title": "Codi IA",
         },
         body: JSON.stringify({
-          model: "gemini-3.5-flash",
-          messages: [
-            { role: "system", content: SYSTEM_PROMPT },
-            { role: "user", content: prompt }
+          contents: [
+            { 
+              role: "user", 
+              parts: [{ text: `${SYSTEM_PROMPT}\n\n${prompt}` }] 
+            }
           ],
         }),
       });
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error("Erreur OpenRouter:", errorData);
+        console.error("Erreur API Gemini:", errorData);
         throw new Error(errorData.error?.message || `Erreur API: ${response.status}`);
       }
 
       const data = await response.json();
-      const text = data.choices?.[0]?.message?.content;
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
 
       if (!text) throw new Error("Réponse vide de l'IA.");
 
