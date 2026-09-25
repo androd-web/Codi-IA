@@ -1,4 +1,5 @@
 import * as LucideIcons from 'lucide-react';
+import { jsPDF } from "jspdf";
 
 interface ResultViewProps {
   markdown: string;
@@ -8,6 +9,24 @@ interface ResultViewProps {
 
 export const ResultView = ({ markdown, onDownload, onRestart }: ResultViewProps) => {
   const html = markdownToHtml(markdown);
+
+  const downloadPdf = () => {
+    const doc = new jsPDF();
+    
+    // Nettoyage simple du HTML pour le PDF
+    const textContent = markdown
+      .replace(/### /g, '')
+      .replace(/## /g, '')
+      .replace(/# /g, '')
+      .replace(/\*\*/g, '')
+      .replace(/\*/g, '')
+      .replace(/`/g, '');
+
+    doc.setFontSize(12);
+    const lines = doc.splitTextToSize(textContent, 180);
+    doc.text(lines, 10, 10);
+    doc.save("feuille-de-route-codi.pdf");
+  };
 
   return (
     <div className="fade-in">
@@ -29,9 +48,9 @@ export const ResultView = ({ markdown, onDownload, onRestart }: ResultViewProps)
       <div className="flex gap-3 mt-7 flex-wrap">
         <button 
           className="bg-surface border border-[#7fff6e] text-[#7fff6e] font-sans font-bold text-[13px] py-2.5 px-5 rounded-sm cursor-pointer transition-all hover:bg-[#7fff6e]/10 flex items-center gap-2"
-          onClick={onDownload}
+          onClick={downloadPdf}
         >
-          <LucideIcons.Download size={16} /> Télécharger (txt)
+          <LucideIcons.Download size={16} /> Télécharger (PDF)
         </button>
         <button 
           className="btn-restart border border-muted text-muted font-sans text-[13px] py-2.5 px-5 rounded-sm cursor-pointer transition-all hover:border-foreground hover:text-foreground flex items-center gap-2"
