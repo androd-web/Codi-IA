@@ -3,17 +3,16 @@ import { jsPDF } from "jspdf";
 
 interface ResultViewProps {
   markdown: string;
-  onDownload: () => void;
   onRestart: () => void;
 }
 
-export const ResultView = ({ markdown, onDownload, onRestart }: ResultViewProps) => {
+export const ResultView = ({ markdown, onRestart }: ResultViewProps) => {
   const html = markdownToHtml(markdown);
 
   const downloadPdf = () => {
     const doc = new jsPDF();
     
-    // Nettoyage simple du HTML pour le PDF
+    // Nettoyage simple du Markdown pour le PDF
     const textContent = markdown
       .replace(/### /g, '')
       .replace(/## /g, '')

@@ -135,17 +135,6 @@ Génère maintenant le rapport complet de feuille de route selon les 6 parties d
     setError(null);
   };
 
-  const downloadResult = () => {
-    if (!result) return;
-    const blob = new Blob([result], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "feuille-de-route-numerique-cameroun.txt";
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
   return (
     <div className="container max-w-215 mx-auto px-6 py-10 pb-20 relative z-10">
       {isAppLoading || loading ? (
@@ -162,7 +151,6 @@ Génère maintenant le rapport complet de feuille de route selon les 6 parties d
         {result ? (
           <ResultView
             markdown={result}
-            onDownload={downloadResult}
             onRestart={restart}
           />
         ) : currentStep === -1 ? (
