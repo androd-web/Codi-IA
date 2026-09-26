@@ -1,6 +1,8 @@
 import "dotenv/config";
 
 async function main() {
+  // Attention : Si tu utilises LiteLLM ailleurs, vérifie tes variables d'environnement
+  // pour voir si GEMINI_API_KEY ou un modèle par défaut est défini.
   const apiKey = process.env.VITE_OPENROUTER_API_KEY;
   console.log("Test de connexion OpenRouter (Modèle Gratuit)...");
 
@@ -17,7 +19,8 @@ async function main() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.0-flash-lite-001:free",
+        // On utilise le modèle recommandé par OpenRouter
+        model: "google/gemini-2.0-flash-lite-001",
         messages: [
           { role: "user", content: "Bonjour, es-tu prêt ?" }
         ],

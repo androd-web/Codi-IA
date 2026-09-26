@@ -7,7 +7,7 @@ async function listModels() {
     return;
   }
 
-  // URL correcte pour lister les modèles Gemini
+  // On utilise l'URL standard de Google Generative AI
   const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
 
   console.log(`\n--- Vérification de l'API : ${url} ---`);
@@ -18,11 +18,12 @@ async function listModels() {
     if (data.error) {
       console.error(`Erreur API :`, data.error.message);
     } else if (data.models) {
-      console.log(`Modèles disponibles (copie le nom exact pour ta config) :`);
+      console.log(`Modèles disponibles :`);
       data.models.forEach((m: any) => {
-        // On affiche le nom complet pour que tu puisses le copier-coller
+        // On affiche le nom sans le préfixe 'models/' pour voir si c'est ça qui bloque
+        const cleanName = m.name.replace('models/', '');
         if (m.supportedGenerationMethods?.includes("generateContent")) {
-          console.log(`- Nom : ${m.name} (Version : ${m.version})`);
+          console.log(`- Nom complet : ${m.name} | Nom propre : ${cleanName}`);
         }
       });
     }

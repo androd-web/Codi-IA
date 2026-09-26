@@ -17,8 +17,8 @@ async function listModels() {
       console.log("Liste des modèles supportant generateContent :");
       data.models.forEach((m: any) => {
         if (m.supportedGenerationMethods?.includes("generateContent")) {
-          // On affiche le nom brut tel qu'attendu par l'API
-          console.log(`- ${m.name}`);
+          // On affiche le nom brut et le nom nettoyé
+          console.log(`- ${m.name} (utilisable comme : ${m.name.replace('models/', '')})`);
         }
       });
     }
