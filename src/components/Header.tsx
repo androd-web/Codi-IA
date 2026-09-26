@@ -16,7 +16,7 @@ export const Header = ({ theme, toggleTheme }: HeaderProps) => {
         {theme === 'light' ? <LucideIcons.Moon size={20} /> : <LucideIcons.Sun size={20} />}
       </button>
 
-      <div className="w-[100px] h-[100px] mb-6 rounded-3xl overflow-hidden shadow-2xl border border-muted">
+      <div className="w-25 h-25 mb-6 rounded-3xl overflow-hidden shadow-2xl border border-muted">
         <img src="/assets/img/codi.webp" alt="Codi IA" className="w-full h-full object-cover" />
       </div>
 
@@ -29,7 +29,7 @@ export const Header = ({ theme, toggleTheme }: HeaderProps) => {
       <h1 className="text-[clamp(28px,5vw,48px)] font-extrabold text-foreground leading-[1.1] mb-4">
         Diagnostic <span className="text-vert">Compétences</span><br />Numériques
       </h1> 
-      <p className="text-muted text-sm md:text-base max-w-[520px] mx-auto leading-relaxed">
+      <p className="text-muted text-sm md:text-base max-w-130 mx-auto leading-relaxed">
         Réponds à 8 questions. Codi IA génère ta feuille de route personnalisée vers les transformations numériques au Cameroun.
       </p>
     </header>

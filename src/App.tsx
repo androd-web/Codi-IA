@@ -26,7 +26,7 @@ export default function App() {
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
-    
+
     // Petit délai pour l'animation de salut au chargement du site
     const timer = setTimeout(() => setIsAppLoading(false), 2000);
     return () => clearTimeout(timer);
@@ -63,31 +63,46 @@ export default function App() {
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
       if (!apiKey) {
-        throw new Error("Clé GEMINI non configurée. Veuillez ajouter VITE_GEMINI_API_KEY dans votre fichier .env");
+        throw new Error(
+          "Clé GEMINI non configurée. Veuillez ajouter VITE_GEMINI_API_KEY dans votre fichier .env",
+        );
       }
 
-      console.log("Appel à GEMINI (Modèle 1.5 Flash)...");
-      
-      // Utilisation de l'API Google Generative Language
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          contents: [
-            { 
-              role: "user", 
-              parts: [{ text: `${SYSTEM_PROMPT}\n\n${prompt}` }] 
-            }
-          ],
-        }),
-      });
+      const requestModel = (model: string) =>
+        fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              contents: [
+                {
+                  role: "user",
+                  parts: [{ text: `${SYSTEM_PROMPT}\n\n${prompt}` }],
+                },
+              ],
+            }),
+          },
+        );
+
+      console.log("Appel à GEMINI (Modèle 3.8 Flash)...");
+      let response = await requestModel("gemini-3.8-flash");
+
+      if (response.status === 429 || response.status === 503) {
+        console.warn(
+          "Gemini 3.8 Flash est saturé; nouvel essai avec Gemini 3.7 Flash.",
+        );
+        response = await requestModel("gemini-3.7-flash");
+      }
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         console.error("Erreur API Gemini:", errorData);
-        throw new Error(errorData.error?.message || `Erreur API: ${response.status}`);
+        throw new Error(
+          errorData.error?.message || `Erreur API: ${response.status}`,
+        );
       }
 
       const data = await response.json();
@@ -135,24 +150,50 @@ Génère maintenant le rapport complet de feuille de route selon les 6 parties d
     setError(null);
   };
 
+  const isIntro = currentStep === -1 && result === null;
+
   return (
-    <div className="container max-w-215 mx-auto px-6 py-10 pb-20 relative z-10">
+    <div
+      className={`container max-w-215 mx-auto px-6 relative z-10 ${
+        isIntro ? "py-10 pb-20" : "min-h-screen py-4 pb-4 md:py-5 md:pb-8"
+      }`}
+    >
       {isAppLoading || loading ? (
-        <LoadingScreen 
+        <LoadingScreen
           fullscreen
           message={isAppLoading ? "Initialisation..." : "Analyse en cours..."}
-          subMessage={isAppLoading ? "Bienvenue sur Codi IA" : "Codi IA construit votre feuille de route personnalisée"}
+          subMessage={
+            isAppLoading
+              ? "Bienvenue sur Codi IA"
+              : "Codi IA construit votre feuille de route personnalisée"
+          }
         />
       ) : null}
 
-      <Header theme={theme} toggleTheme={toggleTheme} />
+      {isIntro ? <Header theme={theme} toggleTheme={toggleTheme} /> : null}
+
+      {!isIntro ? (
+        <button
+          onClick={toggleTheme}
+          className="ml-auto mb-3 flex h-10 w-10 items-center justify-center rounded-sm border border-muted bg-surface text-foreground transition-colors hover:border-vert"
+          title="Changer de thème"
+          aria-label={
+            theme === "light"
+              ? "Activer le thème sombre"
+              : "Activer le thème clair"
+          }
+        >
+          {theme === "light" ? (
+            <LucideIcons.Moon size={18} />
+          ) : (
+            <LucideIcons.Sun size={18} />
+          )}
+        </button>
+      ) : null}
 
       <main>
         {result ? (
-          <ResultView
-            markdown={result}
-            onRestart={restart}
-          />
+          <ResultView markdown={result} onRestart={restart} />
         ) : currentStep === -1 ? (
           <IntroView onStart={() => setCurrentStep(0)} />
         ) : (
@@ -168,9 +209,7 @@ Génère maintenant le rapport complet de feuille de route selon les 6 parties d
         {error && (
           <div className="mt-5 p-5 border border-red-500 bg-red-500/10 rounded-sm text-sm text-red-500 flex items-center gap-2">
             <LucideIcons.AlertTriangle size={18} />
-            <div>
-              Erreur : {error}
-            </div>
+            <div>Erreur : {error}</div>
           </div>
         )}
       </main>

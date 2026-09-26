@@ -1,40 +1,56 @@
+/// <reference types="node" />
+
 import "dotenv/config";
 
+type GeminiResponse = {
+  error?: { message?: string };
+  candidates?: Array<{
+    content?: { parts?: Array<{ text?: string }> };
+  }>;
+};
+
 async function main() {
-  // Attention : Si tu utilises LiteLLM ailleurs, vérifie tes variables d'environnement
-  // pour voir si GEMINI_API_KEY ou un modèle par défaut est défini.
-  const apiKey = process.env.VITE_OPENROUTER_API_KEY;
-  console.log("Test de connexion OpenRouter (Modèle Gratuit)...");
+  const apiKey = process.env.VITE_GEMINI_API_KEY;
+  console.log("Test de connexion à l'API Google Gemini...");
 
   if (!apiKey) {
-    console.error("ERREUR : VITE_OPENROUTER_API_KEY est manquante dans le fichier .env");
+    console.error(
+      "ERREUR : VITE_GEMINI_API_KEY est manquante dans le fichier .env",
+    );
     return;
   }
 
   try {
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          contents: [
+            { role: "user", parts: [{ text: "Bonjour, es-tu prêt ?" }] },
+          ],
+        }),
       },
-      body: JSON.stringify({
-        // On utilise le modèle recommandé par OpenRouter
-        model: "google/gemini-2.0-flash-lite-001",
-        messages: [
-          { role: "user", content: "Bonjour, es-tu prêt ?" }
-        ],
-      }),
-    });
+    );
 
-    const data = await response.json() as any;
-    
-    if (data.error) {
-      console.error("Erreur API:", data.error);
-    } else {
-      console.log("Succès ! Réponse de l'IA :");
-      console.log(data.choices?.[0]?.message?.content);
+    const data = (await response.json()) as GeminiResponse;
+
+    if (!response.ok || data.error) {
+      console.error(
+        "Erreur API Google Gemini:",
+        data.error?.message || response.statusText,
+      );
+      return;
     }
+
+    console.log("Succès ! Réponse de Gemini :");
+    console.log(
+      data.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "Réponse vide de l'IA.",
+    );
   } catch (error) {
     console.error("Erreur de connexion:", error);
   }
